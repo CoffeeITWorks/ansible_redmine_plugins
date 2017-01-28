@@ -1,0 +1,171 @@
+---
+
+# plugins for redmine
+redmine_path: /opt/redmine
+redmine_dir: "{{ redmine_path }}/current"
+redmine_plugins_dir: "{{ redmine_dir }}/plugins"
+redmine_system_user: redmine
+
+# Plugins to install
+# Use:
+# enable assetsdir:
+#          - "somesubfolder"
+# on dict only if your plugin folder has name/assets/somesubfolder folder.
+
+# ALWAYS put some subfolder if your plugin has name/assets
+
+# If plugin doesn't has assets folders Always put
+# assetsdir:
+#   - False
+# Always use name with_underscores not with hiphen - if you don't want a error 404 on plugins
+# Name is the destination dir in plugins dir
+
+
+redmine_plugins_git:
+
+  redmine_custom_reports:
+    name: "redmine_custom_reports"
+    repo: "https://github.com/Restream/redmine_custom_reports.git"
+    assetsdir:
+      - "javascripts"
+      - "stylesheets"
+
+  redmine_gitlab_hook:
+    name: "redmine_gitlab_hook"
+    repo: "https://github.com/phlegx/redmine_gitlab_hook.git"
+    assetsdir: []
+
+  redmine_graphs:
+    name: "redmine_graphs"
+    repo: "https://github.com/bradbeattie/redmine-graphs-plugin.git"
+    assetsdir:
+      - "stylesheets"
+
+  redmine_workload:
+    name: "redmine_workload"
+    repo: "https://github.com/JostBaron/redmine_workload.git"
+    assetsdir:
+      - "javascripts"
+
+  redmine_evm:
+    name: "redmine_evm"
+    repo: "https://github.com/imaginary-cloud/redmine_evm.git"
+    assetsdir:
+      - "stylesheets"
+
+  redmine_summed_fields:
+    name: "redmine_summed_fields"
+    repo: "https://github.com/maxrossello/redmine_summed_fields.git"
+    assetsdir:
+      - "javascripts"
+
+  advanced_roadmap:
+    name: "advanced_roadmap_v2"
+    repo: "https://github.com/Coren/redmine_advanced_roadmap_v2.git"
+    assetsdir:
+      - "stylesheets"
+      - "images"
+
+  sidebar_hide:
+    name: "sidebar_hide"
+    repo: "https://github.com/bdemirkir/sidebar_hide.git"
+    assetsdir:
+      - "javascripts"
+      - "images"
+      - "stylesheets"
+
+  redmine_issue_template:
+    name: "redmine_issue_template"
+    repo: "https://github.com/Undev/redmine_issue_template"
+    assetsdir:
+      - "stylesheets"
+      - "images"
+      - "javascripts"
+
+  redmine_monitoring_controlling:
+    name: "redmine_monitoring_controlling"
+    repo: "https://github.com/fredsdc/Redmine-Monitoring-Controlling.git"
+    assetsdir:
+      - "stylesheets"
+      - "images"
+      - "javascripts"
+
+  progressive_projects_list:
+    name: "progressive_projects_list"
+    repo: "https://github.com/stgeneral/redmine-progressive-projects-list.git"
+    assetsdir:
+      - "stylesheets"
+
+redmine_plugins_hg:
+  redmine_code_review:
+    name: "redmine_code_review"
+    repo: "https://bitbucket.org/haru_iida/redmine_code_review"
+    assetsdir:
+      - "javascripts"
+    
+
+# Some tested incompatible plugins
+redmine_plugins_disabled:
+
+  redmine_holidays_plugin:
+    name: "redmine_holidays_plugin"
+    repo: "https://github.com/taktos/redmine_holidays_plugin.git"
+    assetsdir:
+      - "stylesheets"
+
+  redmine_vacation:
+    name: "redmine_vacation"
+    webpage: "https://github.com/rubynovich/redmine_vacation"
+    assetsdir:
+      - False
+    bundleinstall: false
+
+  redmine_app__space:
+    name: "redmine_app__space"
+    repo: "https://github.com/maxrossello/redmine_app__space.git"
+    assetsdir:
+      - "stylesheets"
+      - "images"
+      - "javascripts"
+
+  redmine_app_timesheets:
+    name: redmine_app_timesheets
+    repo: "https://github.com/maxrossello/redmine_app_timesheets.git"
+    assetsdir:
+      - "stylesheets"
+      - "images"
+    dependency:
+      - "redmine_app__space"
+    documentation:
+      - "https://github.com/maxrossello/redmine_app_timesheets/wiki/Installation-and-configuration"
+
+# Alternative vacations plugins to test:
+# https://github.com/jubsoft/vacation_calendar.git
+# https://github.com/quanta-computing/redmine-marcel.git
+
+#Howto uninstall a plugin?
+# cd /usr/share/redmine
+# Run: rake redmine:plugins:migrate NAME=plugin_name VERSION=0 RAILS_ENV=production
+# rm -rf plugins/plugin_name
+# rm -rf public/plugin_assets/plugin_name
+# then service apache2 reload
+
+# Add yours gems gdependencies here:
+# It's not really required anymore due to the automatic Gemfiles
+redmine_plugins_dependencies:
+
+  redmine_scrum_plugin:
+    gems:
+      - "date_validator"
+    version: "0.8.1"
+
+  redmine_vacation:
+    gems:
+      - "haml"
+    version: "4.0.6"
+
+
+ruby_client_packages:
+  - ruby-haml
+
+# Scrum plugin is installed with some other special settings. (see tasks/plugins.yml)

@@ -1,0 +1,152 @@
+# Plugins management playbook
+# file tasks/plugins.yml
+
+- name: ensure plugins directory
+  file: path="{{ redmine_plugins_dir }}" owner="{{ redmine_system_user }}" group="{{ redmine_system_user }}" mode=0755 state=directory
+  tags:
+    - plugins
+
+- name: ensure plugins assets directory (solves some issues)
+  file: path="{{ redmine_dir }}/public/plugin_assets" owner=www-data group=www-data mode=0755 state=directory
+  tags:
+    - plugins
+
+# Uninstall plugins
+
+- name: Uninstall plugins redmine:plugins:migrate
+  shell: "bash -c 'source /home/$USER/.rvm/scripts/rvm && RAILS_ENV=production bundle exec rake redmine:plugins:migrate  NAME={{ item.value.name }} VERSION=0 && rm -rf {{ redmine_plugins_dir }}/{{ item.value.name }}'"
+  args:
+    chdir: "{{ redmine_plugins_dir }}"
+    removes: "{{ redmine_plugins_dir }}/{{ item.value.name }}"
+  become_user: "{{ redmine_system_user }}"
+  with_dict: "{{ redmine_plugins_disabled }}"
+  notify:
+    - restart apache
+
+- name: Remove plugins dir
+  file:
+    path: "{{ redmine_plugins_dir }}/{{ item.value.name }}"
+    state: absent
+  with_dict: "{{ redmine_plugins_disabled }}"
+  notify:
+    - restart apache
+
+- name: Remove plugins assets dir
+  file:
+    path: "{{ redmine_dir }}/public/plugin_assets/{{ item.value.name }}"
+    state: absent
+  with_dict: "{{ redmine_plugins_disabled }}"
+  notify:
+    - restart apache
+
+# dependencies installation
+
+- name: install plugins gem dependencies for version specific
+  shell: "bash -c 'source /home/$USER/.rvm/scripts/rvm && gem install {{ item.1 }} -v {{ item.0.version | default('latest') }}'"
+  when: item.1 and item.0.version != "latest"
+  with_subelements:
+    - "{{ redmine_plugins_dependencies }}"
+    - gems
+  become_user: "{{ redmine_system_user }}"
+  notify:
+    - restart apache
+
+- name: install plugins gem dependencies for latest versions
+  shell: "bash -c 'source /home/$USER/.rvm/scripts/rvm && gem install {{ item.1 }}'"
+  when: item.1 and item.0.version == "latest"
+  with_subelements:
+    - "{{ redmine_plugins_dependencies }}"
+    - gems
+  become_user: "{{ redmine_system_user }}"
+  notify:
+    - restart apache
+
+#- name: install packages
+#  action: "{{ ansible_pkg_mgr }} name={{ ruby_client_packages | join(',') }} state=present"
+
+# Unpack plugins:
+
+#- name: unpack plugins
+#  unarchive: src={{ item.value.name }}.zip dest="{{ redmine_plugins_dir }}" owner=www-data group=www-data mode=0755 creates="{{ redmine_plugins_dir }}/{{ item.value.name }}"
+- name: git clone plugins
+  git:
+    repo: "{{ item.value.repo }}"
+    depth: 1
+    dest: "{{ redmine_plugins_dir }}/{{ item.value.name }}"
+    umask: "0002"
+    update: yes
+  with_dict: "{{ redmine_plugins_git }}"
+  tags:
+    - plugins
+  become_user: "{{ redmine_system_user }}"
+
+- name: mercurial clone plugins
+  hg:
+    repo: "{{ item.value.repo }}"
+    purge: yes
+    dest: "{{ redmine_plugins_dir }}/{{ item.value.name }}"
+    update: yes
+  with_dict: "{{ redmine_plugins_hg }}"
+  tags:
+    - plugins
+  become_user: "{{ redmine_system_user }}"
+
+- name: install plugins dependencies from Gemfile
+  shell: "bash -c 'source /home/$USER/.rvm/scripts/rvm && {{ item }}'"
+  args:
+    chdir: "{{ redmine_dir }}"
+  with_items:
+    - bundle install --without development test
+  become_user: "{{ redmine_system_user }}"
+  notify:
+    - restart apache
+
+# Solve issues with assets for plugins:
+
+- name: solve assets public files git plugins
+  file:
+    src: "{{ redmine_plugins_dir }}/{{ item.0.name }}/assets"
+    dest: "{{ redmine_dir }}/public/plugin_assets/{{ item.0.name }}"
+    state: link
+    owner: www-data
+    group: www-data
+  with_subelements:
+    - "{{ redmine_plugins_git }}"
+    - assetsdir
+    - flags:
+        skip_missing: true
+
+- name: solve assets public files hg plugins
+  file:
+    src: "{{ redmine_plugins_dir }}/{{ item.0.name }}/assets"
+    dest: "{{ redmine_dir }}/public/plugin_assets/{{ item.0.name }}"
+    state: link
+    owner: www-data
+    group: www-data
+  with_subelements:
+    - "{{ redmine_plugins_hg }}"
+    - assetsdir
+    - flags:
+        skip_missing: true
+
+- name: run bundle redmine:plugins:migrate
+  shell: "bash -c 'source /home/$USER/.rvm/scripts/rvm && {{ item }}'"
+  args:
+    chdir: "{{ redmine_plugins_dir }}"
+  with_items:
+    - RAILS_ENV=production bundle exec rake redmine:plugins:migrate
+  become_user: "{{ redmine_system_user }}"
+  notify:
+    - restart apache
+
+- name: install and run bundler
+  shell: "bash -c 'source /home/$USER/.rvm/scripts/rvm && {{ item }}'"
+  args:
+    chdir: "{{ redmine_dir }}"
+  with_items:
+    - bundle install --without development test
+    - RAILS_ENV=production bundle exec rake db:migrate
+    - RAILS_ENV=production REDMINE_LANG=en bundle exec rake redmine:load_default_data
+  become_user: "{{ redmine_system_user }}"
+  notify:
+    - restart apache

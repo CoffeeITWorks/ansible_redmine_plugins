@@ -1,0 +1,4 @@
+---
+- name: mysql
+  src: ANXS.mysql
+  version: 1.0

@@ -1,0 +1,18 @@
+---
+galaxy_info:
+  author: Pablo Estigarribia
+  description: Install redmine plugins
+  company: CoffeeITWorks@github
+  license: GPLv2
+  min_ansible_version: 2.0
+  platforms:
+  - name: Ubuntu
+    versions:
+    - trusty
+  categories:
+  - development
+  - web
+dependencies:
+#  - { role: 'ansible_redmine'  }
+
+# role from:

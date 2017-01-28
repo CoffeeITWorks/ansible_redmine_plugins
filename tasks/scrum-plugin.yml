@@ -1,0 +1,34 @@
+# https://redmine.ociotec.com/projects/redmine-plugin-scrum/files
+# SCRUM plugin
+# I'm using creates: "{{ redmine_plugins_dir }}/scrum" for all steps to not run those for scrum if it already works
+
+#Commented SCRUM plugin as it will be not used now
+- name: unpack scrum plugin
+  unarchive: src=scrum_v0.10.0.tar.gz dest="{{ redmine_plugins_dir }}" owner=www-data group=www-data mode=0755 creates="{{ redmine_plugins_dir }}/scrum"
+  tags:
+    - plugins
+
+- name: rename plugin scrum
+  command: mv scrum\ v0.10.0 scrum
+  args:
+    chdir: "{{ redmine_plugins_dir }}"
+    creates: "{{ redmine_plugins_dir }}/scrum"
+  tags:
+    - plugins
+
+# Solve scrum post-it icons:
+# https://redmine.ociotec.com/boards/11/topics/90?r=221
+- name: solve post-it icons folder
+  file: path="{{ redmine_dir }}/public/plugin_assets/scrum" owner=www-data group=www-data mode=0755 state=directory
+  tags:
+    - plugins
+
+- name: solve post-it icons
+  shell: "cp -r {{ redmine_plugins_dir }}/scrum/assets/* {{ redmine_dir }}/public/plugin_assets/scrum "
+  args:
+    creates: "{{ redmine_dir }}/public/plugin_assets/scrum/images"
+
+# More instructions:
+# https://redmine.ociotec.com/boards/11/topics/64?r=69
+# https://redmine.ociotec.com/projects/redmine-plugin-scrum/wiki/Wiki"
+- pause: prompt="Please configure SCRUM and roles permissions as required in these instructions https://redmine.ociotec.com/boards/11/topics/64?r=69"
