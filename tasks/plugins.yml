@@ -96,7 +96,7 @@
   args:
     chdir: "{{ redmine_dir }}"
   with_items:
-    - bundle install --without development test
+    - RAILS_ENV=production bundle install --without development test
   become_user: "{{ redmine_system_user }}"
   notify:
     - restart apache

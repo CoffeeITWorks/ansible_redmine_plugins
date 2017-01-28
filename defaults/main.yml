@@ -107,6 +107,13 @@ redmine_plugins_hg:
 # Some tested incompatible plugins
 redmine_plugins_disabled:
 
+  redmine_marcel:
+    name: "redmine_marcel"
+    repo: "https://github.com/quanta-computing/redmine-marcel.git"
+    assetsdir:
+      - "stylesheets"
+      - "javascripts"
+
   redmine_holidays_plugin:
     name: "redmine_holidays_plugin"
     repo: "https://github.com/taktos/redmine_holidays_plugin.git"
