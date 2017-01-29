@@ -96,6 +96,13 @@ redmine_plugins_git:
     assetsdir:
       - "stylesheets"
 
+  mega_calendar:
+    name: "mega_calendar"
+    repo: "https://github.com/berti92/mega_calendar.git"
+    assetsdir:
+      - "stylesheets"
+      - "javascripts"
+
 redmine_plugins_hg:
   redmine_code_review:
     name: "redmine_code_review"
@@ -107,11 +114,25 @@ redmine_plugins_hg:
 # Some tested incompatible plugins
 redmine_plugins_disabled:
 
-  redmine_marcel:
-    name: "redmine_marcel"
-    repo: "https://github.com/quanta-computing/redmine-marcel.git"
+  redmine_vacation:
+    name: "redmine_vacation"
+    repo: "https://github.com/CoffeeITWorks/redmine_vacation.git"
+    assetsdir: []
+    bundleinstall: false
+
+  marcel:
+    name: "marcel"
+    repo: "https://github.com/pablodav/redmine-marcel.git"
     assetsdir:
       - "stylesheets"
+      - "javascripts"
+
+  redmine_vacation_calendar:
+    name: "redmine_vacation_calendar"
+    repo: "https://github.com/jubsoft/vacation_calendar.git"
+    assetsdir:
+      - "stylesheets"
+      - "images"
       - "javascripts"
 
   redmine_holidays_plugin:
@@ -119,13 +140,6 @@ redmine_plugins_disabled:
     repo: "https://github.com/taktos/redmine_holidays_plugin.git"
     assetsdir:
       - "stylesheets"
-
-  redmine_vacation:
-    name: "redmine_vacation"
-    webpage: "https://github.com/rubynovich/redmine_vacation"
-    assetsdir:
-      - False
-    bundleinstall: false
 
   redmine_app__space:
     name: "redmine_app__space"
@@ -146,9 +160,9 @@ redmine_plugins_disabled:
     documentation:
       - "https://github.com/maxrossello/redmine_app_timesheets/wiki/Installation-and-configuration"
 
+
 # Alternative vacations plugins to test:
 # https://github.com/jubsoft/vacation_calendar.git
-# https://github.com/quanta-computing/redmine-marcel.git
 
 #Howto uninstall a plugin?
 # cd /usr/share/redmine
@@ -159,17 +173,12 @@ redmine_plugins_disabled:
 
 # Add yours gems gdependencies here:
 # It's not really required anymore due to the automatic Gemfiles
-redmine_plugins_dependencies:
+redmine_plugins_dependencies: []
 
-  redmine_scrum_plugin:
-    gems:
-      - "date_validator"
-    version: "0.8.1"
-
-  redmine_vacation:
-    gems:
-      - "haml"
-    version: "4.0.6"
+#  redmine_scrum_plugin:
+#    gems:
+#      - "date_validator"
+#    version: "0.8.1"
 
 
 ruby_client_packages:

@@ -139,7 +139,7 @@
   notify:
     - restart apache
 
-- name: install and run bundler
+- name: run bundler and db:migrate
   shell: "bash -c 'source /home/$USER/.rvm/scripts/rvm && {{ item }}'"
   args:
     chdir: "{{ redmine_dir }}"
