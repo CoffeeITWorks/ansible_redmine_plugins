@@ -103,16 +103,16 @@ redmine_plugins_git:
       - "stylesheets"
       - "javascripts"
 
-redmine_plugins_hg:
+redmine_plugins_hg: {}
+
+# Some tested incompatible plugins
+redmine_plugins_disabled:
+
   redmine_code_review:
     name: "redmine_code_review"
     repo: "https://bitbucket.org/haru_iida/redmine_code_review"
     assetsdir:
       - "javascripts"
-    
-
-# Some tested incompatible plugins
-redmine_plugins_disabled:
 
   redmine_vacation:
     name: "redmine_vacation"
