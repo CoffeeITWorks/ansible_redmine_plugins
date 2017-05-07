@@ -2,7 +2,7 @@
 # file tasks/plugins.yml
 
 - name: ensure plugins directory
-  file: path="{{ redmine_plugins_dir }}" owner="{{ redmine_system_user }}" group="{{ redmine_system_user }}" mode=0755 state=directory recurse=yes
+  file: path="{{ redmine_plugins_dir }}" owner="{{ redmine_system_user }}" group="{{ redmine_system_user }}" mode=0755 state=directory
   tags:
     - plugins
 
@@ -75,6 +75,7 @@
     dest: "{{ redmine_plugins_dir }}/{{ item.value.name }}"
     umask: "0002"
     update: yes
+    force: yes
   with_dict: "{{ redmine_plugins_git }}"
   tags:
     - plugins
@@ -86,6 +87,7 @@
     purge: yes
     dest: "{{ redmine_plugins_dir }}/{{ item.value.name }}"
     update: yes
+    force: yes
   with_dict: "{{ redmine_plugins_hg }}"
   tags:
     - plugins
