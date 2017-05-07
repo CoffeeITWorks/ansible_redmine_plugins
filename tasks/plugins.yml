@@ -2,7 +2,7 @@
 # file tasks/plugins.yml
 
 - name: ensure plugins directory
-  file: path="{{ redmine_plugins_dir }}" owner="{{ redmine_system_user }}" group="{{ redmine_system_user }}" mode=0755 state=directory
+  file: path="{{ redmine_plugins_dir }}" owner="{{ redmine_system_user }}" group="{{ redmine_system_user }}" mode=0755 state=directory recurse=yes
   tags:
     - plugins
 
