@@ -14,7 +14,7 @@
 # Uninstall plugins
 
 - name: Uninstall plugins redmine:plugins:migrate
-  shell: "bash -c 'source /home/$USER/.rvm/scripts/rvm && RAILS_ENV=production bundle exec rake redmine:plugins:migrate  NAME={{ item.value.name }} VERSION=0 && rm -rf {{ redmine_plugins_dir }}/{{ item.value.name }}'"
+  shell: "bash -c 'source {{ rvm_path }} && RAILS_ENV=production bundle _{{ redmine_bundle_version }}_ exec rake redmine:plugins:migrate  NAME={{ item.value.name }} VERSION=0 && rm -rf {{ redmine_plugins_dir }}/{{ item.value.name }}'"
   args:
     chdir: "{{ redmine_plugins_dir }}"
     removes: "{{ redmine_plugins_dir }}/{{ item.value.name }}"
@@ -42,7 +42,7 @@
 # dependencies installation
 
 - name: install plugins gem dependencies for version specific
-  shell: "bash -c 'source /home/$USER/.rvm/scripts/rvm && gem install {{ item.1 }} -v {{ item.0.version | default('latest') }}'"
+  shell: "bash -c 'source {{ rvm_path }} && gem install {{ item.1 }} -v {{ item.0.version | default('latest') }}'"
   when: item.1 and item.0.version != "latest"
   with_subelements:
     - "{{ redmine_plugins_dependencies }}"
@@ -52,7 +52,7 @@
     - restart apache
 
 - name: install plugins gem dependencies for latest versions
-  shell: "bash -c 'source /home/$USER/.rvm/scripts/rvm && gem install {{ item.1 }}'"
+  shell: "bash -c 'source {{ rvm_path }} && gem install {{ item.1 }}'"
   when: item.1 and item.0.version == "latest"
   with_subelements:
     - "{{ redmine_plugins_dependencies }}"
@@ -94,11 +94,11 @@
   become_user: "{{ redmine_system_user }}"
 
 - name: install plugins dependencies from Gemfile
-  shell: "bash -c 'source /home/$USER/.rvm/scripts/rvm && {{ item }}'"
+  shell: "bash -c 'source {{ rvm_path }} && {{ item }}'"
   args:
     chdir: "{{ redmine_dir }}"
   with_items:
-    - RAILS_ENV=production bundle install --without development test
+    - RAILS_ENV=production bundle _{{ redmine_bundle_version }}_ install --without development test
   become_user: "{{ redmine_system_user }}"
   notify:
     - restart apache
@@ -132,23 +132,23 @@
         skip_missing: true
 
 - name: run bundle redmine:plugins:migrate
-  shell: "bash -c 'source /home/$USER/.rvm/scripts/rvm && {{ item }}'"
+  shell: "bash -c 'source {{ rvm_path }} && {{ item }}'"
   args:
     chdir: "{{ redmine_plugins_dir }}"
   with_items:
-    - RAILS_ENV=production bundle exec rake redmine:plugins:migrate
+    - RAILS_ENV=production bundle _{{ redmine_bundle_version }}_ exec rake redmine:plugins:migrate
   become_user: "{{ redmine_system_user }}"
   notify:
     - restart apache
 
 - name: run bundler and db:migrate
-  shell: "bash -c 'source /home/$USER/.rvm/scripts/rvm && {{ item }}'"
+  shell: "bash -c 'source {{ rvm_path }} && {{ item }}'"
   args:
     chdir: "{{ redmine_dir }}"
   with_items:
-    - bundle install --without development test
-    - RAILS_ENV=production bundle exec rake db:migrate
-    - RAILS_ENV=production REDMINE_LANG=en bundle exec rake redmine:load_default_data
+    - bundle _{{ redmine_bundle_version }}_ install --without development test
+    - RAILS_ENV=production bundle _{{ redmine_bundle_version }}_ exec rake db:migrate
+    - RAILS_ENV=production REDMINE_LANG=en bundle _{{ redmine_bundle_version }}_ exec rake redmine:load_default_data
   become_user: "{{ redmine_system_user }}"
   notify:
     - restart apache

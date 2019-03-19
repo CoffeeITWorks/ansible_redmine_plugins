@@ -6,6 +6,10 @@ redmine_dir: "{{ redmine_path }}/current"
 redmine_plugins_dir: "{{ redmine_dir }}/plugins"
 redmine_system_user: redmine
 
+#rvm_path: /home/{{ redmine_system_user }}/.rvm/scripts/rvm
+rvm_path: /usr/local/rvm/scripts/rvm
+redmine_bundle_version: 1.17.3
+
 # Plugins to install
 # Use:
 # enable assetsdir:
