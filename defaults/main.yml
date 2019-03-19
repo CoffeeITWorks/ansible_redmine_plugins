@@ -70,13 +70,11 @@ redmine_plugins_git:
       - "stylesheets"
       - "images"
 
-  sidebar_hide:
-    name: "sidebar_hide"
-    repo: "https://github.com/bdemirkir/sidebar_hide.git"
+  redmine_smile_togglesidebar:
+    name: "redmine_smile_togglesidebar"
+    repo: "https://github.com/Smile-SA/redmine_smile_togglesidebar.git"
     assetsdir:
-      - "javascripts"
       - "images"
-      - "stylesheets"
 
   redmine_issue_template:
     name: "redmine_issue_template"
