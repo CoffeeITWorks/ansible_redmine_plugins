@@ -11,11 +11,7 @@
         recurse=yes
   with_items:
     - "{{ redmine_plugins_dir }}"
-  tags:
-    - plugins
-
-- name: ensure plugins assets directory (solves some issues)
-  file: path="{{ redmine_dir }}/public/plugin_assets" owner=www-data group=www-data mode=0755 state=directory
+    - "{{ redmine_path }}/current/public/plugin_assets"
   tags:
     - plugins
 
