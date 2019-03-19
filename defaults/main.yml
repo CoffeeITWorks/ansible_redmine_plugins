@@ -108,6 +108,7 @@ redmine_plugins_git:
 redmine_plugins_hg: {}
 
 # Some tested incompatible plugins
+# --- START REMOVING PLUGINS ---
 redmine_plugins_disabled:
 
   redmine_code_review:
@@ -162,6 +163,14 @@ redmine_plugins_disabled:
     documentation:
       - "https://github.com/maxrossello/redmine_app_timesheets/wiki/Installation-and-configuration"
 
+  sidebar_hide:
+    name: "sidebar_hide"
+    repo: "https://github.com/bdemirkir/sidebar_hide.git"
+    assetsdir:
+      - "javascripts"
+      - "images"
+      - "stylesheets"
+## --- END REMOVING PLUGINS ---
 
 # Alternative vacations plugins to test:
 # https://github.com/jubsoft/vacation_calendar.git
