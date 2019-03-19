@@ -1,8 +1,16 @@
 # Plugins management playbook
 # file tasks/plugins.yml
 
-- name: ensure plugins directory
-  file: path="{{ redmine_plugins_dir }}" owner="{{ redmine_system_user }}" group="{{ redmine_system_user }}" mode=0755 state=directory
+# This task is copied from redmine role now.
+- name: set permissions on redmine dirs
+  file: dest={{ item }}
+        owner=www-data
+        group=www-data
+        state=directory
+        mode=u+rwxs,g+rwxs,o+rx
+        recurse=yes
+  with_items:
+    - "{{ redmine_plugins_dir }}"
   tags:
     - plugins
 

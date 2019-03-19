@@ -31,4 +31,5 @@
 # More instructions:
 # https://redmine.ociotec.com/boards/11/topics/64?r=69
 # https://redmine.ociotec.com/projects/redmine-plugin-scrum/wiki/Wiki"
-- pause: prompt="Please configure SCRUM and roles permissions as required in these instructions https://redmine.ociotec.com/boards/11/topics/64?r=69"
+- name: pause with promt notification about the manual instructions to followup
+  pause: prompt="Please configure SCRUM and roles permissions as required in these instructions https://redmine.ociotec.com/boards/11/topics/64?r=69"
