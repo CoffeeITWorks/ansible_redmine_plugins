@@ -5,6 +5,7 @@ galaxy_info:
   company: CoffeeITWorks@github
   min_ansible_version: 2.6
   # https://galaxy.ansible.com/api/v1/platforms/
+  license: MIT
   platforms:
   - name: Ubuntu
     versions:

@@ -1,0 +1,4 @@
+0.9.0
+  * Tests added and fixes to be compatible with latest redmine role
+  * As sidebar_hide plugin is not available anymore we have changed to redmine_smile_togglesidebar, 
+    you must uninstall sidebar_hide before upgrading this role and this redmine_plugin

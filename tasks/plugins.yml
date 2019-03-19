@@ -19,6 +19,7 @@
     chdir: "{{ redmine_plugins_dir }}"
     removes: "{{ redmine_plugins_dir }}/{{ item.value.name }}"
   become_user: "{{ redmine_system_user }}"
+  become: yes
   with_dict: "{{ redmine_plugins_disabled }}"
   notify:
     - restart apache
@@ -48,6 +49,7 @@
     - "{{ redmine_plugins_dependencies }}"
     - gems
   become_user: "{{ redmine_system_user }}"
+  become: yes
   notify:
     - restart apache
 
@@ -58,6 +60,7 @@
     - "{{ redmine_plugins_dependencies }}"
     - gems
   become_user: "{{ redmine_system_user }}"
+  become: yes
   notify:
     - restart apache
 
@@ -76,10 +79,12 @@
     umask: "0002"
     update: yes
     force: yes
+    version: "{{ item.value.version | default('master') }}"
   with_dict: "{{ redmine_plugins_git }}"
   tags:
     - plugins
   become_user: "{{ redmine_system_user }}"
+  become: yes
 
 - name: mercurial clone plugins
   hg:
@@ -100,6 +105,8 @@
   with_items:
     - RAILS_ENV=production bundle _{{ redmine_bundle_version }}_ install --without development test
   become_user: "{{ redmine_system_user }}"
+  become: yes
+  changed_when: false
   notify:
     - restart apache
 
@@ -138,6 +145,8 @@
   with_items:
     - RAILS_ENV=production bundle _{{ redmine_bundle_version }}_ exec rake redmine:plugins:migrate
   become_user: "{{ redmine_system_user }}"
+  become: yes
+  changed_when: false
   notify:
     - restart apache
 
@@ -150,5 +159,7 @@
     - RAILS_ENV=production bundle _{{ redmine_bundle_version }}_ exec rake db:migrate
     - RAILS_ENV=production REDMINE_LANG=en bundle _{{ redmine_bundle_version }}_ exec rake redmine:load_default_data
   become_user: "{{ redmine_system_user }}"
+  become: yes
+  changed_when: false
   notify:
     - restart apache
