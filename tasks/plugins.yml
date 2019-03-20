@@ -126,8 +126,7 @@
   with_subelements:
     - "{{ redmine_plugins_git }}"
     - assetsdir
-    - flags:
-        skip_missing: true
+    - skip_missing: True
 
 - name: solve assets public files hg plugins
   file:

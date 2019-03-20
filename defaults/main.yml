@@ -63,13 +63,6 @@ redmine_plugins_git:
     assetsdir:
       - "javascripts"
 
-  advanced_roadmap:
-    name: "advanced_roadmap_v2"
-    repo: "https://github.com/Coren/redmine_advanced_roadmap_v2.git"
-    assetsdir:
-      - "stylesheets"
-      - "images"
-
   redmine_smile_togglesidebar:
     name: "redmine_smile_togglesidebar"
     repo: "https://github.com/Smile-SA/redmine_smile_togglesidebar.git"
@@ -170,6 +163,11 @@ redmine_plugins_disabled:
       - "javascripts"
       - "images"
       - "stylesheets"
+
+  advanced_roadmap:
+    name: "advanced_roadmap_v2"
+    repo: "https://github.com/Coren/redmine_advanced_roadmap_v2.git"
+
 ## --- END REMOVING PLUGINS ---
 
 # Alternative vacations plugins to test:
